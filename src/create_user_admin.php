@@ -19,12 +19,18 @@ Utils::loadEnv(__DIR__ . '/../');
 
 $entityManager = Utils::getEntityManager();
 
+if ($argc < 5 || $argc > 6) {
+    echo  "Introduce solo 5 parametros: nombre, email, password, enabled, isAdmin";
+    exit(0);
+
+}
+
 $user = new User();
-$user->setUsername($_ENV['ADMIN_USER_NAME']);
-$user->setEmail($_ENV['ADMIN_USER_EMAIL']);
-$user->setPassword($_ENV['ADMIN_USER_PASSWD']);
-$user->setEnabled(true);
-$user->setIsAdmin(true);
+$user->setUsername((string)$argv[1] ?? $_ENV['ADMIN_USER_NAME']);
+$user->setEmail((string)$argv[2] ?? $_ENV['ADMIN_USER_EMAIL']);
+$user->setPassword((string)$argv[3] ?? $_ENV['ADMIN_USER_PASSWD']);
+$user->setEnabled((boolean)$argv[4] ?? true);
+$user->setIsAdmin((boolean)$argv[5] ?? true);
 
 try {
     $entityManager->persist($user);

@@ -30,6 +30,7 @@ MARCA_FIN;
     exit(0);
 }
 
+
 $newResult    = (int) $argv[1];
 $userId       = (int) $argv[2];
 $newTimestamp = $argv[3] ?? new DateTime('now');
