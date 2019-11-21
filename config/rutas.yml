@@ -1,0 +1,12 @@
+# rutas.yml
+---
+ruta_raíz:
+  path:     /
+  controller: 'funcionHomePage'
+  methods:   [ GET ]
+
+ruta_user_list:
+  path:     /user/list
+  controller: 'funcionListadoUsers'
+  methods:
+    - GET
