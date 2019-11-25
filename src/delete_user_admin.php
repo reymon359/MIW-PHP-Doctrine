@@ -20,11 +20,12 @@ Utils::loadEnv(__DIR__ . '/../');
 $entityManager = Utils::getEntityManager();
 
 if ($argc < 1 || $argc > 2) {
-    echo  "Introduce solo el userId como parámetro: userId";
+    echo  "Se necesita este parametro: [userId]";
     exit(0);
 }
 
-$userId = (int) $argv[0];
+$userId = (int) $argv[1];
+
 /** @var User $user */
 $user = $entityManager
     ->getRepository(User::class)
@@ -37,7 +38,7 @@ if (null === $user) {
 try {
     $entityManager->remove($user);
     $entityManager->flush();
-    echo 'Deleted Admin User with ID #' . $user->getId() . PHP_EOL;
+    echo 'Deleted Admin User with ID #' . $userId . PHP_EOL;
 } catch (Exception $exception) {
     echo $exception->getMessage() . PHP_EOL;
 }
