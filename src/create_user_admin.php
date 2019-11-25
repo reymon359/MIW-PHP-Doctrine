@@ -20,7 +20,13 @@ Utils::loadEnv(__DIR__ . '/../');
 $entityManager = Utils::getEntityManager();
 
 if ($argc < 5 || $argc > 6) {
-    echo  "Se necesitan 5 parametros: [nombre] [email] [password] [enabled] [isAdmin]";
+
+    $fich = basename(__FILE__);
+    echo <<< MARCA_FIN
+    Se necesitan 5 parametros: [nombre] [email] [password] [enabled] [isAdmin]
+    Uso: $fich <nombre> <email> <password> [<enabled>] [<isAdmin>] 
+MARCA_FIN;
+
     exit(0);
 
 }

@@ -21,12 +21,13 @@ Utils::loadEnv(__DIR__ . '/../');
 $entityManager = Utils::getEntityManager();
 
 if ($argc < 3 || $argc > 4) {
+
     $fich = basename(__FILE__);
     echo <<< MARCA_FIN
-
-    Usage: $fich <Result> <UserId> [<Timestamp>]
-
+    Se necesitan 3 parametros: [Result] [UserID] [Timestamp]
+    Uso: $fich <Result> <UserId> [<Timestamp>]
 MARCA_FIN;
+
     exit(0);
 }
 
