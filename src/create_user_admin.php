@@ -20,7 +20,7 @@ Utils::loadEnv(__DIR__ . '/../');
 $entityManager = Utils::getEntityManager();
 
 if ($argc < 5 || $argc > 6) {
-    echo  "Introduce solo 5 parametros: nombre, email, password, enabled, isAdmin";
+    echo  "Se necesitan 5 parametros: [nombre] [email] [password] [enabled] [isAdmin]";
     exit(0);
 
 }
