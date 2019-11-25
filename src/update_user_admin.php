@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP version 7.3
- * src\create_user_admin.php
+ * src\update_user_admin.php
  *
  * @category Utils
  * @package  MiW\Results
