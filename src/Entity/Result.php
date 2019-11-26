@@ -26,6 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Result implements \JsonSerializable
 {
+
     /**
      * Result id
      *
@@ -101,7 +102,6 @@ class Result implements \JsonSerializable
         $this->user   = $user;
         $this->time   = $time;
     }
-
     /**
      * @return int
      */
@@ -109,6 +109,61 @@ class Result implements \JsonSerializable
     {
         return $this->id;
     }
+    /**
+     * @return int
+     */
+    public function getResult(): int
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param int $result
+     * @return Result
+     */
+    public function setResult(int $result): Result
+    {
+        $this->result = $result;
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @return Result
+     */
+    public function setUser(User $user): Result
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+
+    /**
+     * @return \DateTime
+     */
+    public function getTime(): \DateTime
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param \DateTime $time
+     * @return Result
+     */
+    public function setTime(\DateTime $time): Result
+    {
+        $this->time = $time;
+        return $this;
+    }
+
 
     /**
      * Implements __toString()
