@@ -10,7 +10,6 @@
  */
 
 use MiW\Results\Entity\Result;
-use MiW\Results\Entity\User;
 use MiW\Results\Utils;
 
 require __DIR__ . '/../vendor/autoload.php';
