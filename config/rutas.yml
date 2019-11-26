@@ -10,3 +10,8 @@ ruta_user_list:
   controller: 'funcionListadoUsers'
   methods:
     - GET
+
+ruta_user_nuevo:
+  path:       /user/new
+  controller: 'funcionNuevoUser'
+  methods:   [ GET, POST ]
