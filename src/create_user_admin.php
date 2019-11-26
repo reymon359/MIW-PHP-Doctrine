@@ -19,7 +19,7 @@ Utils::loadEnv(__DIR__ . '/../');
 
 $entityManager = Utils::getEntityManager();
 
-if ($argc < 5 || $argc > 6) {
+if ($argc < 4 || $argc > 6) {
 
     $fich = basename(__FILE__);
     echo <<< MARCA_FIN
@@ -35,8 +35,8 @@ $user = new User();
 $user->setUsername((string)$argv[1] ?? $_ENV['ADMIN_USER_NAME']);
 $user->setEmail((string)$argv[2] ?? $_ENV['ADMIN_USER_EMAIL']);
 $user->setPassword((string)$argv[3] ?? $_ENV['ADMIN_USER_PASSWD']);
-$user->setEnabled((boolean)$argv[4] ?? true);
-$user->setIsAdmin((boolean)$argv[5] ?? true);
+$user->setEnabled($argc >= 5 ? (int)$argv[4] : true);
+$user->setIsAdmin($argc >= 6 ? (int)$argv[5] : true);
 
 try {
     $entityManager->persist($user);
