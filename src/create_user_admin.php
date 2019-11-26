@@ -23,7 +23,7 @@ if ($argc < 5 || $argc > 6) {
 
     $fich = basename(__FILE__);
     echo <<< MARCA_FIN
-    Se necesitan 5 parametros: [nombre] [email] [password] [enabled] [isAdmin]
+    Se necesitan estos parametros: [nombre] [email] [password] [enabled] [isAdmin]
     Uso: $fich <nombre> <email> <password> [<enabled>] [<isAdmin>] 
 MARCA_FIN;
 

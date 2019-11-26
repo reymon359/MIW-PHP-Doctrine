@@ -24,14 +24,14 @@ if ($argc < 3 || $argc > 4) {
 
     $fich = basename(__FILE__);
     echo <<< MARCA_FIN
-    Se necesitan 4 parametros: [ResultID] [Result] [UserID] [Timestamp]
-    Uso: $fich <ResultID> <Result> <UserId> [<Timestamp>]
+    Se necesitan estos parametros: [ResultID] [Result] [UserID] [Timestamp]
+    Uso: $fich <ResultID> <Result> [<UserId>] [<Timestamp>]
 MARCA_FIN;
 
     exit(0);
 }
 
-$resultId = (int) $argv[1];
+$resultId = (int)$argv[1];
 /** @var Result $result */
 $result = $entityManager
     ->getRepository(Result::class)
@@ -41,7 +41,7 @@ if (null === $result) {
     exit(0);
 }
 
-$userId = (int) $argv[3];
+$userId = $argc >= 4? (int)$argv[3] : $result->getUser()->getId();
 /** @var User $user */
 $user = $entityManager
     ->getRepository(User::class)
@@ -51,18 +51,15 @@ if (null === $user) {
     exit(0);
 }
 
-$result->set
+$result->setResult((int)$argv[2]);
+$result->setUser($user);
+$result->setTime($argv[4] ?? $result->getTime());
 
-$newTimestamp = $argv[3] ?? new DateTime('now');
-
-
-
-$result = new Result($newResult, $user, $newTimestamp);
 try {
     $entityManager->persist($result);
     $entityManager->flush();
-    echo 'Created Result with ID ' . $result->getId()
-        . ' USER ' . $user->getUsername() . PHP_EOL;
+    echo 'Updated Result with ID ' . $result->getId()
+        . ' and USER ' . $user->getUsername() . PHP_EOL;
 } catch (Exception $exception) {
     echo $exception->getMessage();
 }
