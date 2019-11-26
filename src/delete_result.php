@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP version 7.3
- * src\delete_user_admin.php
+ * src\delete_result.php
  *
  * @category Utils
  * @package  MiW\Results
@@ -9,6 +9,7 @@
  * @link     http://www.etsisi.upm.es/ ETS de Ingeniería de Sistemas Informáticos
  */
 
+use MiW\Results\Entity\Result;
 use MiW\Results\Entity\User;
 use MiW\Results\Utils;
 
@@ -22,28 +23,29 @@ $entityManager = Utils::getEntityManager();
 if ($argc < 1 || $argc > 2) {
     $fich = basename(__FILE__);
     echo <<< MARCA_FIN
-    Se necesitan este parametros: [UserId]
-    Uso: $fich <UserId>
+    Se necesitan este parametros: [ResultId]
+    Uso: $fich <ResultId>
 MARCA_FIN;
 
     exit(0);
 }
 
-$userId = (int)$argv[1];
 
-/** @var User $user */
-$user = $entityManager
-    ->getRepository(User::class)
-    ->findOneBy(['id' => $userId]);
-if (null === $user) {
-    echo "Usuario $userId no encontrado" . PHP_EOL;
+$resultId = (int)$argv[1];
+
+/** @var Result $result */
+$result = $entityManager
+    ->getRepository(Result::class)
+    ->findOneBy(['id' => $resultId]);
+if (null === $result) {
+    echo "Resultado $resultId no encontrado" . PHP_EOL;
     exit(0);
 }
 
 try {
-    $entityManager->remove($user);
+    $entityManager->remove($result);
     $entityManager->flush();
-    echo 'Deleted Admin User with ID #' . $userId . PHP_EOL;
+    echo 'Deleted Resultado with ID #' . $resultId . PHP_EOL;
 } catch (Exception $exception) {
     echo $exception->getMessage() . PHP_EOL;
 }
