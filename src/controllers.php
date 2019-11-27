@@ -63,12 +63,12 @@ ___MARCA_FIN;
         $enabled = $_POST['enabled'] ?? true;
         $isAdmin = $_POST['isAdmin'] ?? true;
 
-        $user = new User($nombre, $graduacion);
+        $user = new User($nombre, $email, $password, $enabled, $isAdmin);
 
         // Hacer persistente los datos
-        $entityManager->persist($bebida);
+        $entityManager->persist($user);
         $entityManager->flush();
-        var_dump($bebida);
+        var_dump($user);
 
         // Enlace Listado Users
         $rutaListadoUsers = $routes->get('ruta_user_list')->getPath();
