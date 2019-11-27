@@ -21,3 +21,8 @@ ruta_result_list:
   controller: 'funcionListadoResultados'
   methods:
     - GET
+
+ruta_result_nuevo:
+  path:       /result/new
+  controller: 'funcionNuevoResult'
+  methods:   [ GET, POST ]

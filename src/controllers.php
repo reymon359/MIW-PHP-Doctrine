@@ -8,21 +8,25 @@
  * @link     http://www.etsisi.upm.es/ ETS de Ingeniería de Sistemas Informáticos
  */
 
+use MiW\Results\Entity\Result;
 use MiW\Results\Entity\User;
 use MiW\Results\Utils;
 
 function funcionHomePage()
 {
     global $routes;
-
+    $path =  $_SERVER['REQUEST_URI'];
+    echo $path;
     $rutaListadoUsers = $routes->get('ruta_user_list')->getPath();
     $rutaListadoResults = $routes->get('ruta_result_list')->getPath();
     echo <<< ____MARCA_FIN
     <ul>
-        <li><a href="$rutaListadoUsers">Listado Users</a></li>
+        <li><a href="$path$rutaListadoUsers">Listado Users</a></li>
         <li><a href="$rutaListadoResults">Listado Resultados</a></li>
     </ul>
+
 ____MARCA_FIN;
+
 }
 
 function funcionListadoUsers(): void
@@ -74,7 +78,7 @@ ___MARCA_FIN;
 
         // Enlace Listado Users
         $rutaListadoUsers = $routes->get('ruta_user_list')->getPath();
-        echo "<a href='  $rutaListadoUsers'>Listado Users</a>";
+        echo "<a href='$rutaListadoUsers'>Listado Users</a>";
     }
 }
 
@@ -90,4 +94,39 @@ function funcionListadoResultados(): void
     // Enlace Nuevo Result
     $rutaNuevoResult = $routes->get('ruta_result_nuevo')->getPath();
     echo "<a href='$rutaNuevoResult'>Nuevo Result</a>";
+}
+
+function funcionNuevoResult()
+{
+    global $routes, $context;
+    var_dump($context);
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
+        $rutaNuevoResult = $routes->get('ruta_result_nuevo')->getPath();
+        echo <<< ___MARCA_FIN
+    <form method="POST" action="$rutaNuevoResult">
+        Resultado: <input type="number" name="result" required>
+        UserId: <input type="number" name="userId" required>
+        TimeStamp: <input type="date" name="timeStamp" >
+        <input type="submit" value="Enviar"> 
+    </form>
+___MARCA_FIN;
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
+        $entityManager = Utils::getEntityManager();
+
+        $result = $_POST['result'];
+        $userId = $_POST['userId'];
+        $timeStamp = $_POST['timeStamp'] ?? new DateTime('now');
+
+        $user = new User($result, $userId, $timeStamp);
+
+        // Hacer persistente los datos
+        $entityManager->persist($result);
+        $entityManager->flush();
+        var_dump($result);
+
+        // Enlace Listado Resultados
+        $rutaListadoResults = $routes->get('ruta_result_list')->getPath();
+        echo "<a href='$rutaListadoResults'>Listado Resultados</a>";
+    }
 }
