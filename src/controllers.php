@@ -15,14 +15,14 @@ use MiW\Results\Utils;
 function funcionHomePage()
 {
     global $routes;
-    $path =  $_SERVER['REQUEST_URI'];
-    echo $path;
+    $path = $_SERVER['REQUEST_URI'];
+
     $rutaListadoUsers = $routes->get('ruta_user_list')->getPath();
     $rutaListadoResults = $routes->get('ruta_result_list')->getPath();
     echo <<< ____MARCA_FIN
     <ul>
         <li><a href="$path$rutaListadoUsers">Listado Users</a></li>
-        <li><a href="$rutaListadoResults">Listado Resultados</a></li>
+        <li><a href="$path$rutaListadoResults">Listado Resultados</a></li>
     </ul>
 
 ____MARCA_FIN;
@@ -37,6 +37,18 @@ function funcionListadoUsers(): void
     $usersRepository = $entityManager->getRepository(User::class);
     $users = $usersRepository->findAll();
     var_dump($users);
+
+    foreach ($users as $user){
+//        echo $user->getId();
+//        echo $user->getUsername();
+        echo <<< ___MARCA_FIN
+
+       $user->getId();
+       $user->getUsername();
+   
+___MARCA_FIN;
+    }
+
 
     // Enlace Nuevo User
     $rutaNuevoUser = $routes->get('ruta_user_nuevo')->getPath();
