@@ -15,3 +15,9 @@ ruta_user_nuevo:
   path:       /user/new
   controller: 'funcionNuevoUser'
   methods:   [ GET, POST ]
+
+ruta_result_list:
+  path:     /result/list
+  controller: 'funcionListadoResultados'
+  methods:
+    - GET

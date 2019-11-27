@@ -16,9 +16,11 @@ function funcionHomePage()
     global $routes;
 
     $rutaListadoUsers = $routes->get('ruta_user_list')->getPath();
+    $rutaListadoResults = $routes->get('ruta_result_list')->getPath();
     echo <<< ____MARCA_FIN
     <ul>
         <li><a href="$rutaListadoUsers">Listado Users</a></li>
+        <li><a href="$rutaListadoResults">Listado Resultados</a></li>
     </ul>
 ____MARCA_FIN;
 }
@@ -74,4 +76,18 @@ ___MARCA_FIN;
         $rutaListadoUsers = $routes->get('ruta_user_list')->getPath();
         echo "<a href='  $rutaListadoUsers'>Listado Users</a>";
     }
+}
+
+function funcionListadoResultados(): void
+{
+    global $routes;
+
+    $entityManager = Utils::getEntityManager();
+    $resultsRepository = $entityManager->getRepository(Result::class);
+    $results = $resultsRepository->findAll();
+    var_dump($results);
+
+    // Enlace Nuevo Result
+    $rutaNuevoResult = $routes->get('ruta_result_nuevo')->getPath();
+    echo "<a href='$rutaNuevoResult'>Nuevo Result</a>";
 }
