@@ -15,14 +15,14 @@ use MiW\Results\Utils;
 function funcionHomePage()
 {
     global $routes;
-    $path = $_SERVER['REQUEST_URI'];
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
 
-    $rutaListadoUsers = $routes->get('ruta_user_list')->getPath();
-    $rutaListadoResults = $routes->get('ruta_result_list')->getPath();
+    $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
+    $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
     echo <<< ____MARCA_FIN
     <ul>
-        <li><a href="$path$rutaListadoUsers">Listado Users</a></li>
-        <li><a href="$path$rutaListadoResults">Listado Resultados</a></li>
+        <li><a href="$rutaListadoUsers">Listado Users</a></li>
+        <li><a href="$rutaListadoResults">Listado Resultados</a></li>
     </ul>
 
 ____MARCA_FIN;
@@ -32,27 +32,57 @@ ____MARCA_FIN;
 function funcionListadoUsers(): void
 {
     global $routes;
+    $path = $_SERVER['REQUEST_URI'];
 
+    $pieces = explode("index.php", $path);
+    echo $pieces[0];
     $entityManager = Utils::getEntityManager();
     $usersRepository = $entityManager->getRepository(User::class);
     $users = $usersRepository->findAll();
-    var_dump($users);
+//    var_dump($users);
 
-    foreach ($users as $user){
-//        echo $user->getId();
-//        echo $user->getUsername();
+    echo <<< ___MARCA_FIN
+<h2 style="text-align: center">Lista Usuarios</h2>
+<table style="width:50%; margin:auto">
+  <tr>
+    <th>UserId</th>
+    <th>Nombre</th>
+    <th>Email</th>
+    <th>Enabled</th>
+    <th>IsAdmin</th>
+  </tr>
+___MARCA_FIN;
+
+    foreach ($users as $user) {
+        $userId = $user->getId();
+        $username = $user->getUsername();
+        $email = $user->getEmail();
+        $enabled = $user->isEnabled() ? "si" : "no";
+        $isAdmin = $user->isAdmin() ? "si" : "no";
+
         echo <<< ___MARCA_FIN
-
-       $user->getId();
-       $user->getUsername();
+  <tr>
+    <td>$userId</td>
+    <td>$username</td>
+    <td>$email</td>
+    <td>$enabled</td>
+    <td>$isAdmin</td>
+  </tr>
    
 ___MARCA_FIN;
     }
 
+    echo <<< ___MARCA_FIN
+ </table>
+___MARCA_FIN;
 
     // Enlace Nuevo User
     $rutaNuevoUser = $routes->get('ruta_user_nuevo')->getPath();
-    echo "<a href='$rutaNuevoUser'>Nuevo User</a>";
+    $rutaRaiz = $routes->get('ruta_raíz')->getPath();
+    echo "<div style='text-align: center'>
+    <a href='$path$rutaNuevoUser'>Nuevo User</a>
+    <a href='$path$rutaRaiz'>Inicio</a>
+    </div>";
 }
 
 function funcionNuevoUser()
