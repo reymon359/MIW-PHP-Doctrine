@@ -18,12 +18,21 @@ function funcionHomePage()
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
 
     $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
+    $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
     $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
+    $rutaNuevoResultado = $path . $routes->get('ruta_result_nuevo')->getPath();
+
     echo <<< ____MARCA_FIN
-    <ul>
+<div style="text-align: center">
+
+<h2 >Resultados Doctrine</h2>
+    <ul style="list-style-type: none;">
         <li><a href="$rutaListadoUsers">Listado Users</a></li>
+        <li><a href="$rutaNuevoUser">Nuevo user</a></li>
         <li><a href="$rutaListadoResults">Listado Resultados</a></li>
+        <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>
     </ul>
+</div>
 
 ____MARCA_FIN;
 
@@ -32,10 +41,8 @@ ____MARCA_FIN;
 function funcionListadoUsers(): void
 {
     global $routes;
-    $path = $_SERVER['REQUEST_URI'];
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
 
-    $pieces = explode("index.php", $path);
-    echo $pieces[0];
     $entityManager = Utils::getEntityManager();
     $usersRepository = $entityManager->getRepository(User::class);
     $users = $usersRepository->findAll();
@@ -77,11 +84,11 @@ ___MARCA_FIN;
 ___MARCA_FIN;
 
     // Enlace Nuevo User
-    $rutaNuevoUser = $routes->get('ruta_user_nuevo')->getPath();
-    $rutaRaiz = $routes->get('ruta_raíz')->getPath();
+    $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
+    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
     echo "<div style='text-align: center'>
-    <a href='$path$rutaNuevoUser'>Nuevo User</a>
-    <a href='$path$rutaRaiz'>Inicio</a>
+    <a href='$rutaNuevoUser'>Nuevo User</a>
+    <a href='$rutaRaiz'>Inicio</a>
     </div>";
 }
 
