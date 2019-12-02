@@ -14,32 +14,23 @@ use MiW\Results\Utils;
 
 function funcionHomePage()
 {
-    global $routes;
-    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
-
-    $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
-    $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
-    $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
-    $rutaNuevoResultado = $path . $routes->get('ruta_result_nuevo')->getPath();
+    displayNavbar();
 
     echo <<< ____MARCA_FIN
 <div style="text-align: center">
 
 <h2 >Resultados Doctrine</h2>
-    <ul style="list-style-type: none;">
-        <li><a href="$rutaListadoUsers">Listado Users</a></li>
-        <li><a href="$rutaNuevoUser">Nuevo user</a></li>
-        <li><a href="$rutaListadoResults">Listado Resultados</a></li>
-        <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>
-    </ul>
+<p>CRUD para usuarios y resultados</p>
+<p>Ramón Morcillo Cascales</p>
 </div>
 ____MARCA_FIN;
-    displayFooter();
 
 }
 
 function funcionListadoUsers(): void
 {
+    displayNavbar();
+
     global $routes;
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
     $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
@@ -83,12 +74,13 @@ ___MARCA_FIN;
  </table>
 ___MARCA_FIN;
 
-    displayFooter();
 }
 
 
 function funcionNuevoUser()
 {
+    displayNavbar();
+
     global $routes, $context;
 //    var_dump($context);
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
@@ -107,11 +99,7 @@ function funcionNuevoUser()
         isAdmin: <input type="checkbox" name="isAdmin" checked> <br><br>
         <input type="submit" value="Enviar"> 
     </form>
- 
-         <div style='text-align: center'>
-                <a href='$rutaRaiz'>Inicio</a>
-                <a href='$rutaListadoUsers'>Listado Users</a>
-            </div>
+       
 ___MARCA_FIN;
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
         $entityManager = Utils::getEntityManager();
@@ -130,12 +118,13 @@ ___MARCA_FIN;
 //        var_dump($user);
 
         echo "<h2 style=\"text-align: center\">Usuario $nombre creado!</h2>";
-        displayFooter();
+
     }
 }
 
 function funcionListadoResultados(): void
 {
+    displayNavbar();
     global $routes;
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
     $rutaNuevoResult = $path . $routes->get('ruta_result_nuevo')->getPath();
@@ -175,11 +164,13 @@ ___MARCA_FIN;
  </table>
 ___MARCA_FIN;
 
-    displayFooter();
+
 }
 
 function funcionNuevoResult()
 {
+    displayNavbar();
+
     global $routes, $context;
 //    var_dump($context);
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
@@ -197,10 +188,7 @@ function funcionNuevoResult()
         TimeStamp: <input type="date" name="timeStamp" ><br><br>
         <input type="submit" value="Enviar"> 
     </form>
-   <div style='text-align: center'>
-                <a href='$rutaRaiz'>Inicio</a>
-                <a href='$rutaListadoResults'>Listado Results</a>
-            </div>
+
 ___MARCA_FIN;
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
         $entityManager = Utils::getEntityManager();
@@ -209,13 +197,13 @@ ___MARCA_FIN;
         $userId = $_POST['userId'];
         $timeStamp = isset($_POST['timeStamp']) ? new DateTime($_POST['timeStamp']) : new DateTime('now');
 
-    $user = $entityManager
-        ->getRepository(User::class)
-        ->findOneBy(['id' => $userId]);
-    if (null === $user) {
-        echo "Usuario $userId no encontrado" . PHP_EOL;
-        exit(0);
-    }
+        $user = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['id' => $userId]);
+        if (null === $user) {
+            echo "Usuario $userId no encontrado" . PHP_EOL;
+            exit(0);
+        }
 
         $result = new Result($newResult, $user, $timeStamp);
 
@@ -226,25 +214,26 @@ ___MARCA_FIN;
 
         echo "<h2 style=\"text-align: center\">Resultado $newResult creado!</h2>";
 
-        displayFooter();
     }
 }
 
-function displayFooter(){
+function displayNavbar()
+{
     global $routes;
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
-
+    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
     $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
     $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
     $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
     $rutaNuevoResultado = $path . $routes->get('ruta_result_nuevo')->getPath();
 
     echo <<< ____MARCA_FIN
-    <ul style="list-style-type: none;display: flex;flex-wrap: wrap;">
-        <li><a href="$rutaListadoUsers">Listado Users</a></li>&nbsp;
-        <li><a href="$rutaNuevoUser">Nuevo user</a></li>&nbsp;
-        <li><a href="$rutaListadoResults">Listado Resultados</a></li>&nbsp;
-        <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>&nbsp;
+    <ul style="list-style-type: none;display: flex;flex-wrap: wrap;justify-content: space-evenly;align-items: center;">
+        <li><a href="$rutaRaiz">Inicio</a></li>
+        <li><a href="$rutaListadoUsers">Listado Users</a></li>
+        <li><a href="$rutaNuevoUser">Nuevo user</a></li>
+        <li><a href="$rutaListadoResults">Listado Resultados</a></li>
+        <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>
     </ul>
 ____MARCA_FIN;
 }
