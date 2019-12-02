@@ -31,3 +31,8 @@ ruta_result_nuevo:
   path:       /result/new
   controller: 'funcionNuevoResult'
   methods:   [ GET, POST ]
+
+ruta_result_eliminar:
+  path:       /result/delete
+  controller: 'funcionEliminarResultado'
+  methods:   [ GET, POST ]

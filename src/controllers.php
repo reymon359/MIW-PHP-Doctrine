@@ -21,7 +21,7 @@ function funcionHomePage()
 
 <h2 >Resultados Doctrine</h2>
 <p>CRUD para usuarios y resultados</p>
-<p>Ramón Morcillo Cascales</p>
+<p><a href="https://ramonmorcillo.com" target="_blank">Ramón Morcillo Cascales</a></p>
 </div>
 ____MARCA_FIN;
 
@@ -69,9 +69,7 @@ ___MARCA_FIN;
 function funcionNuevoUser()
 {
     displayNavbar();
-
-    global $routes, $context;
-//    var_dump($context);
+    global $routes;
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
     $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
 
@@ -104,7 +102,6 @@ ___MARCA_FIN;
         $entityManager->persist($user);
         $entityManager->flush();
 //        var_dump($user);
-
         echo "<h2 style=\"text-align: center\">Usuario $nombre creado!</h2>";
 
     }
@@ -113,11 +110,9 @@ ___MARCA_FIN;
 function funcionEliminarUser()
 {
     displayNavbar();
-
     global $routes;
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
     $rutaEliminarUser = $path . $routes->get('ruta_user_eliminar')->getPath();
-
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
         echo <<< ___MARCA_FIN
@@ -138,7 +133,7 @@ ___MARCA_FIN;
             ->getRepository(User::class)
             ->findOneBy(['id' => $userId]);
         if (null === $user) {
-            echo "Usuario $userId no encontrado" . PHP_EOL;
+            echo "<h2 style=\"text-align: center\">Usuario con id $userId no encontrado</h2>";
             exit(0);
         }
         try {
@@ -226,19 +221,56 @@ ___MARCA_FIN;
             ->getRepository(User::class)
             ->findOneBy(['id' => $userId]);
         if (null === $user) {
-            echo "Usuario $userId no encontrado" . PHP_EOL;
+            echo "<h2 style=\"text-align: center\">Usuario con id $userId no encontrado</h2>". PHP_EOL;
             exit(0);
         }
-
         $result = new Result($newResult, $user, $timeStamp);
-
         // Hacer persistente los datos
         $entityManager->persist($result);
         $entityManager->flush();
 //        var_dump($result);
-
         echo "<h2 style=\"text-align: center\">Resultado $newResult creado!</h2>";
 
+    }
+}
+
+function funcionEliminarResultado()
+{
+    displayNavbar();
+    global $routes;
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
+    $rutaEliminarResultado = $path . $routes->get('ruta_result_eliminar')->getPath();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
+        echo <<< ___MARCA_FIN
+<h2 style="text-align: center">Eliminar resultado</h2>
+<p style="text-align: center">Introduce el id del resultado que deseas eliminar</p>
+    <form style="text-align: center" method="POST" action="$rutaEliminarResultado">
+        ID de resultado: <input type="number" name="resultId" required><br><br>
+        <input type="submit" value="Enviar"> 
+    </form>
+       
+___MARCA_FIN;
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
+        $entityManager = Utils::getEntityManager();
+        $resultId = $_POST['resultId'];
+
+        /** @var Result $result */
+        $result = $entityManager
+            ->getRepository(Result::class)
+            ->findOneBy(['id' => $resultId]);
+        if (null === $result) {
+            echo "<h2 style=\"text-align: center\">Resultado con id $resultId no encontrado</h2>". PHP_EOL;
+            exit(0);
+        }
+
+        try {
+            $entityManager->remove($result);
+            $entityManager->flush();
+            echo "<h2 style=\"text-align: center\">Resultado con id $resultId eliminado</h2>";
+        } catch (Exception $exception) {
+            echo $exception->getMessage() . PHP_EOL;
+        }
     }
 }
 
@@ -250,17 +282,19 @@ function displayNavbar()
     $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
     $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
     $rutaEliminarUser = $path . $routes->get('ruta_user_eliminar')->getPath();
-
     $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
     $rutaNuevoResultado = $path . $routes->get('ruta_result_nuevo')->getPath();
+    $rutaEliminarResultado = $path . $routes->get('ruta_result_eliminar')->getPath();
     echo <<< ____MARCA_FIN
     <ul style="list-style-type: none;display: flex;flex-wrap: wrap;justify-content: space-evenly;align-items: center;">
         <li><a href="$rutaRaiz">Inicio</a></li>
-        <li><a href="$rutaListadoUsers">Listado Users</a></li>
-        <li><a href="$rutaNuevoUser">Nuevo user</a></li>
-        <li><a href="$rutaEliminarUser">Eliminar user</a></li>
+        <li><a href="$rutaListadoUsers">Listado Usuarios</a></li>
+        <li><a href="$rutaNuevoUser">Nuevo Usuarios</a></li>
+        <li><a href="$rutaEliminarUser">Eliminar Usuario</a></li>
         <li><a href="$rutaListadoResults">Listado Resultados</a></li>
         <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>
+        <li><a href="$rutaEliminarResultado">Eliminar Resultado</a></li>
+
     </ul>
 ____MARCA_FIN;
 }
