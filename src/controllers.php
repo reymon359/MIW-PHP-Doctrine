@@ -109,12 +109,17 @@ function funcionNuevoUser()
 <h2 style="text-align: center">Nuevo usuario</h2>
     <form style="text-align: center" method="POST" action="$rutaNuevoUser">
         Nombre: <input type="text" name="nombre" required><br><br>
-        Email: <input type="email" name="email" required><br><br>
+        Email: <input type="text" name="email" required><br><br>
         Password: <input type="password" name="password" required><br><br>
-        Enabled: <input type="checkbox" name="enabled" value="true"> 
-        isAdmin: <input type="checkbox" name="isAdmin" value="true"> <br><br>
+        Enabled: <input type="checkbox" name="enabled" checked> 
+        isAdmin: <input type="checkbox" name="isAdmin" checked> <br><br>
         <input type="submit" value="Enviar"> 
     </form>
+ 
+         <div style='text-align: center'>
+                <a href='$rutaListadoUsers'>Listado Users</a>
+                <a href='$rutaRaiz'>Inicio</a>
+            </div>
 ___MARCA_FIN;
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
         $entityManager = Utils::getEntityManager();
@@ -122,8 +127,8 @@ ___MARCA_FIN;
         $nombre = $_POST['nombre'];
         $email = $_POST['email'];
         $password = $_POST['password'];
-        $enabled = $_POST['enabled'] ?? true;
-        $isAdmin = $_POST['isAdmin'] ?? true;
+        $enabled = isset($_POST['enabled']) ? $_POST['enabled'] : false;
+        $isAdmin = isset($_POST['isAdmin']) ? $_POST['isAdmin'] : false;
 
         $user = new User($nombre, $email, $password, $enabled, $isAdmin);
 
