@@ -33,8 +33,8 @@ function funcionHomePage()
         <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>
     </ul>
 </div>
-
 ____MARCA_FIN;
+    displayFooter();
 
 }
 
@@ -83,12 +83,7 @@ ___MARCA_FIN;
  </table>
 ___MARCA_FIN;
 
-
-    // Footer
-    echo "<div style='text-align: center'>
-    <a href='$rutaRaiz'>Inicio</a>
-    <a href='$rutaNuevoUser'>Nuevo User</a>
-    </div>";
+    displayFooter();
 }
 
 
@@ -135,12 +130,7 @@ ___MARCA_FIN;
 //        var_dump($user);
 
         echo "<h2 style=\"text-align: center\">Usuario $nombre creado!</h2>";
-
-        // Footer
-        echo "<div style='text-align: center'>
-                <a href='$rutaRaiz'>Inicio</a>
-                <a href='$rutaListadoUsers'>Listado Users</a>
-            </div>";
+        displayFooter();
     }
 }
 
@@ -185,11 +175,7 @@ ___MARCA_FIN;
  </table>
 ___MARCA_FIN;
 
-    // Footer
-    echo "<div style='text-align: center'>
-    <a href='$rutaRaiz'>Inicio</a>
-    <a href='$rutaNuevoResult'>Nuevo Resultado</a>
-    </div>";
+    displayFooter();
 }
 
 function funcionNuevoResult()
@@ -240,10 +226,25 @@ ___MARCA_FIN;
 
         echo "<h2 style=\"text-align: center\">Resultado $newResult creado!</h2>";
 
-        // Footer
-        echo "<div style='text-align: center'>
-                <a href='$rutaRaiz'>Inicio</a>
-                <a href='$rutaListadoResults'>Listado Results</a>
-            </div>";
+        displayFooter();
     }
+}
+
+function displayFooter(){
+    global $routes;
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
+
+    $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
+    $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
+    $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
+    $rutaNuevoResultado = $path . $routes->get('ruta_result_nuevo')->getPath();
+
+    echo <<< ____MARCA_FIN
+    <ul style="list-style-type: none;display: flex;flex-wrap: wrap;">
+        <li><a href="$rutaListadoUsers">Listado Users</a></li>&nbsp;
+        <li><a href="$rutaNuevoUser">Nuevo user</a></li>&nbsp;
+        <li><a href="$rutaListadoResults">Listado Resultados</a></li>&nbsp;
+        <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>&nbsp;
+    </ul>
+____MARCA_FIN;
 }
