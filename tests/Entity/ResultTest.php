@@ -141,7 +141,8 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     {
         $result = new Result(self::POINTS, $this->user, new DateTime('2019-12-02 11:11:11'));
        echo $result->__toString();
-        "0 - 2018 -               username - 2019-12-02 11:11:11"
+        self::assertEquals("  0 - ".self::POINTS." -               ".self::USERNAME." - 2019-12-02 11:11:11", $result->__toString());
+
     }
 
     /**
