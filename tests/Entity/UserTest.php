@@ -26,8 +26,8 @@ class UserTest extends TestCase
      * @var User $user
      */
     private $user;
-    private const NOMBRE_USER = '7571$$/()/·"@ñÑ?¿;:-';
-    private const EMAIL_USER = 'email7571$$/()/·"@ñÑ?¿;:-';
+    private const NOMBRE_USER = 'nameuser';
+    private const EMAIL_USER = 'emailuser';
 
     /**
      * Sets up the fixture.
@@ -67,7 +67,6 @@ class UserTest extends TestCase
     {
         $user = new User(self::NOMBRE_USER, self::EMAIL_USER);
         self::assertEquals(self::NOMBRE_USER, $user->getUsername());
-
     }
 
     /**
@@ -76,9 +75,8 @@ class UserTest extends TestCase
      */
     public function testGetSetEmail(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $user = new User(self::NOMBRE_USER, self::EMAIL_USER);
+        self::assertEquals(self::EMAIL_USER, $user->getEmail());
     }
 
     /**
@@ -87,9 +85,8 @@ class UserTest extends TestCase
      */
     public function testIsSetEnabled(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $user = new User(self::NOMBRE_USER, self::EMAIL_USER);
+        self::assertFalse($user->isEnabled());
     }
 
     /**
@@ -98,9 +95,8 @@ class UserTest extends TestCase
      */
     public function testIsSetAdmin(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $user = new User(self::NOMBRE_USER, self::EMAIL_USER);
+        self::assertFalse($user->isAdmin());
     }
 
     /**
@@ -109,9 +105,8 @@ class UserTest extends TestCase
      */
     public function testSetValidatePassword(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $user = new User(self::NOMBRE_USER, self::EMAIL_USER, 'pass');
+        self::assertFalse($user->validatePassword($user->setPassword('pass')));
     }
 
     /**
@@ -119,9 +114,8 @@ class UserTest extends TestCase
      */
     public function testToString(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $user = new User(self::NOMBRE_USER, self::EMAIL_USER);
+        self::assertEquals(self::NOMBRE_USER, $user->getUsername());
     }
 
     /**
@@ -129,8 +123,8 @@ class UserTest extends TestCase
      */
     public function testJsonSerialize(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $user = new User(self::NOMBRE_USER, self::EMAIL_USER);
+        self::assertEquals("0" . self::NOMBRE_USER . self::EMAIL_USER,
+            implode("", $user->jsonSerialize()));
     }
 }
