@@ -26,6 +26,7 @@ class UserTest extends TestCase
      * @var User $user
      */
     private $user;
+
     private const NOMBRE_USER = 'nameuser';
     private const EMAIL_USER = 'emailuser';
 
