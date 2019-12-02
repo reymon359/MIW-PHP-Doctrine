@@ -77,10 +77,8 @@ ___MARCA_FIN;
     <td>$enabled</td>
     <td>$isAdmin</td>
   </tr>
-   
 ___MARCA_FIN;
     }
-
     echo <<< ___MARCA_FIN
  </table>
 ___MARCA_FIN;
@@ -170,10 +168,29 @@ function funcionListadoResultados(): void
   </tr>
 ___MARCA_FIN;
 
+    foreach ($results as $result) {
+        $resultId = $result->getId();
+        $resultInfo = $result->getResult();
+        $userName = $result->getUser();
+        $time = $result->getTime()->format('Y-m-d H:i:s');
+        echo <<< ___MARCA_FIN
+  <tr>
+    <td>$resultId</td>
+    <td>$resultInfo</td>
+    <td>$userName</td>
+    <td>$time</td>
+  </tr>
+___MARCA_FIN;
+    }
+    echo <<< ___MARCA_FIN
+ </table>
+___MARCA_FIN;
 
-    // Enlace Nuevo Result
-    $rutaNuevoResult = $routes->get('ruta_result_nuevo')->getPath();
-    echo "<a href='$rutaNuevoResult'>Nuevo Result</a>";
+    // Footer
+    echo "<div style='text-align: center'>
+    <a href='$rutaNuevoResult'>Nuevo Resultado</a>
+    <a href='$rutaRaiz'>Inicio</a>
+    </div>";
 }
 
 function funcionNuevoResult()
