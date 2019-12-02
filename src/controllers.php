@@ -149,13 +149,10 @@ ___MARCA_FIN;
 function funcionListadoResultados(): void
 {
     displayNavbar();
-    global $routes;
-    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
 
     $entityManager = Utils::getEntityManager();
     $resultsRepository = $entityManager->getRepository(Result::class);
     $results = $resultsRepository->findAll();
-//    var_dump($results);
 
     echo <<< ___MARCA_FIN
 <h2 style="text-align: center">Lista Resultados</h2>
@@ -193,8 +190,7 @@ function funcionNuevoResult()
 {
     displayNavbar();
 
-    global $routes, $context;
-//    var_dump($context);
+    global $routes;
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
     $rutaNuevoResult = $path . $routes->get('ruta_result_nuevo')->getPath();
 
@@ -215,13 +211,18 @@ ___MARCA_FIN;
 
         $newResult = $_POST['result'];
         $userId = $_POST['userId'];
-        $timeStamp = isset($_POST['timeStamp']) ? new DateTime($_POST['timeStamp']) : new DateTime('now');
+        try {
+            $timeStamp = isset($_POST['timeStamp']) ? new DateTime($_POST['timeStamp']) : new DateTime('now');
+        } catch (Exception $e) {
+            echo $e;
+        }
 
+        /** @var User $user */
         $user = $entityManager
             ->getRepository(User::class)
             ->findOneBy(['id' => $userId]);
         if (null === $user) {
-            echo "<h2 style=\"text-align: center\">Usuario con id $userId no encontrado</h2>". PHP_EOL;
+            echo "<h2 style=\"text-align: center\">Usuario con id $userId no encontrado</h2>" . PHP_EOL;
             exit(0);
         }
         $result = new Result($newResult, $user, $timeStamp);
@@ -260,7 +261,7 @@ ___MARCA_FIN;
             ->getRepository(Result::class)
             ->findOneBy(['id' => $resultId]);
         if (null === $result) {
-            echo "<h2 style=\"text-align: center\">Resultado con id $resultId no encontrado</h2>". PHP_EOL;
+            echo "<h2 style=\"text-align: center\">Resultado con id $resultId no encontrado</h2>" . PHP_EOL;
             exit(0);
         }
 
