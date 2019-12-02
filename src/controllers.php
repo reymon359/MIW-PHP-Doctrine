@@ -109,7 +109,7 @@ function funcionNuevoUser()
 <h2 style="text-align: center">Nuevo usuario</h2>
     <form style="text-align: center" method="POST" action="$rutaNuevoUser">
         Nombre: <input type="text" name="nombre" required><br><br>
-        Email: <input type="text" name="email" required><br><br>
+        Email: <input type="email" name="email" required><br><br>
         Password: <input type="password" name="password" required><br><br>
         Enabled: <input type="checkbox" name="enabled" checked> 
         isAdmin: <input type="checkbox" name="isAdmin" checked> <br><br>
@@ -150,11 +150,26 @@ ___MARCA_FIN;
 function funcionListadoResultados(): void
 {
     global $routes;
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
+    $rutaNuevoResult = $path . $routes->get('ruta_result_nuevo')->getPath();
+    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
 
     $entityManager = Utils::getEntityManager();
     $resultsRepository = $entityManager->getRepository(Result::class);
     $results = $resultsRepository->findAll();
-    var_dump($results);
+//    var_dump($results);
+
+    echo <<< ___MARCA_FIN
+<h2 style="text-align: center">Lista Resultados</h2>
+<table style="width:50%; margin:auto">
+  <tr>
+    <th>ResultId</th>
+    <th>Resultado</th>
+    <th>Usuario</th>
+    <th>Tiempo</th>
+  </tr>
+___MARCA_FIN;
+
 
     // Enlace Nuevo Result
     $rutaNuevoResult = $routes->get('ruta_result_nuevo')->getPath();
