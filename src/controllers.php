@@ -290,7 +290,7 @@ function displayNavbar()
     <ul style="list-style-type: none;display: flex;flex-wrap: wrap;justify-content: space-evenly;align-items: center;">
         <li><a href="$rutaRaiz">Inicio</a></li>
         <li><a href="$rutaListadoUsers">Listado Usuarios</a></li>
-        <li><a href="$rutaNuevoUser">Nuevo Usuarios</a></li>
+        <li><a href="$rutaNuevoUser">Nuevo Usuario</a></li>
         <li><a href="$rutaEliminarUser">Eliminar Usuario</a></li>
         <li><a href="$rutaListadoResults">Listado Resultados</a></li>
         <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>

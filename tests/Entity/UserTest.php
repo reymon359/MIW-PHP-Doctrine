@@ -26,6 +26,8 @@ class UserTest extends TestCase
      * @var User $user
      */
     private $user;
+    private const NOMBRE_USER = '7571$$/()/·"@ñÑ?¿;:-';
+    private const EMAIL_USER = 'email7571$$/()/·"@ñÑ?¿;:-';
 
     /**
      * Sets up the fixture.
@@ -41,9 +43,11 @@ class UserTest extends TestCase
      */
     public function testConstructor(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $user = new User(self::NOMBRE_USER, self::EMAIL_USER);
+        self::assertSame(0, $user->getId());
+        self::assertEquals(self::NOMBRE_USER, $user->getUsername());
+        self::assertFalse($user->isEnabled());
+        self::assertFalse($user->isAdmin());
     }
 
     /**
@@ -51,9 +55,8 @@ class UserTest extends TestCase
      */
     public function testGetId(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $user = new User(self::NOMBRE_USER, self::EMAIL_USER);
+        self::assertSame(0, $user->getId());
     }
 
     /**
@@ -62,9 +65,9 @@ class UserTest extends TestCase
      */
     public function testGetSetUsername(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $user = new User(self::NOMBRE_USER, self::EMAIL_USER);
+        self::assertEquals(self::NOMBRE_USER, $user->getUsername());
+
     }
 
     /**
