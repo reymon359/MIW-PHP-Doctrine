@@ -224,14 +224,16 @@ function displayNavbar()
     $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
     $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
     $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
+    $rutaEliminarUser = $path . $routes->get('ruta_user_eliminar')->getPath();
+
     $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
     $rutaNuevoResultado = $path . $routes->get('ruta_result_nuevo')->getPath();
-
     echo <<< ____MARCA_FIN
     <ul style="list-style-type: none;display: flex;flex-wrap: wrap;justify-content: space-evenly;align-items: center;">
         <li><a href="$rutaRaiz">Inicio</a></li>
         <li><a href="$rutaListadoUsers">Listado Users</a></li>
         <li><a href="$rutaNuevoUser">Nuevo user</a></li>
+        <li><a href="$rutaEliminarUser">Eliminar user</a></li>
         <li><a href="$rutaListadoResults">Listado Resultados</a></li>
         <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>
     </ul>
