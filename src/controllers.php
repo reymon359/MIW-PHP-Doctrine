@@ -30,12 +30,6 @@ ____MARCA_FIN;
 function funcionListadoUsers(): void
 {
     displayNavbar();
-
-    global $routes;
-    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
-    $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
-    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
-
     $entityManager = Utils::getEntityManager();
     $usersRepository = $entityManager->getRepository(User::class);
     $users = $usersRepository->findAll();
@@ -44,13 +38,8 @@ function funcionListadoUsers(): void
     echo <<< ___MARCA_FIN
 <h2 style="text-align: center">Lista Usuarios</h2>
 <table style="width:50%; margin:auto">
-  <tr>
-    <th>UserId</th>
-    <th>Nombre</th>
-    <th>Email</th>
-    <th>Enabled</th>
-    <th>IsAdmin</th>
-  </tr>
+  <tr>    <th>UserId</th>    <th>Nombre</th>    <th>Email</th>
+    <th>Enabled</th>    <th>IsAdmin</th>  </tr>
 ___MARCA_FIN;
 
     foreach ($users as $user) {
@@ -85,8 +74,7 @@ function funcionNuevoUser()
 //    var_dump($context);
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
     $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
-    $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
-    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
+
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
         echo <<< ___MARCA_FIN
@@ -122,13 +110,52 @@ ___MARCA_FIN;
     }
 }
 
+function funcionEliminarUser()
+{
+    displayNavbar();
+
+    global $routes;
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
+    $rutaEliminarUser = $path . $routes->get('ruta_user_eliminar')->getPath();
+
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
+        echo <<< ___MARCA_FIN
+<h2 style="text-align: center">Eliminar usuario</h2>
+<p style="text-align: center">Introduce el id del usuario que deseas eliminar</p>
+    <form style="text-align: center" method="POST" action="$rutaEliminarUser">
+        ID de usuario: <input type="number" name="userId" required><br><br>
+        <input type="submit" value="Enviar"> 
+    </form>
+       
+___MARCA_FIN;
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
+        $entityManager = Utils::getEntityManager();
+        $userId = $_POST['userId'];
+
+        /** @var User $user */
+        $user = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['id' => $userId]);
+        if (null === $user) {
+            echo "Usuario $userId no encontrado" . PHP_EOL;
+            exit(0);
+        }
+        try {
+            $entityManager->remove($user);
+            $entityManager->flush();
+            echo "<h2 style=\"text-align: center\">Usuario con id $userId eliminado</h2>";
+        } catch (Exception $exception) {
+            echo $exception->getMessage() . PHP_EOL;
+        }
+    }
+}
+
 function funcionListadoResultados(): void
 {
     displayNavbar();
     global $routes;
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
-    $rutaNuevoResult = $path . $routes->get('ruta_result_nuevo')->getPath();
-    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
 
     $entityManager = Utils::getEntityManager();
     $resultsRepository = $entityManager->getRepository(Result::class);
@@ -175,8 +202,6 @@ function funcionNuevoResult()
 //    var_dump($context);
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
     $rutaNuevoResult = $path . $routes->get('ruta_result_nuevo')->getPath();
-    $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
-    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
 
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
