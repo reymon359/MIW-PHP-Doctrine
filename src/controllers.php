@@ -86,8 +86,8 @@ ___MARCA_FIN;
 
     // Footer
     echo "<div style='text-align: center'>
-    <a href='$rutaNuevoUser'>Nuevo User</a>
     <a href='$rutaRaiz'>Inicio</a>
+    <a href='$rutaNuevoUser'>Nuevo User</a>
     </div>";
 }
 
@@ -102,7 +102,6 @@ function funcionNuevoUser()
     $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
-//        $rutaNuevoUser = $routes->get('ruta_user_nuevo')->getPath();
         echo <<< ___MARCA_FIN
 <h2 style="text-align: center">Nuevo usuario</h2>
     <form style="text-align: center" method="POST" action="$rutaNuevoUser">
@@ -115,8 +114,8 @@ function funcionNuevoUser()
     </form>
  
          <div style='text-align: center'>
-                <a href='$rutaListadoUsers'>Listado Users</a>
                 <a href='$rutaRaiz'>Inicio</a>
+                <a href='$rutaListadoUsers'>Listado Users</a>
             </div>
 ___MARCA_FIN;
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
@@ -139,8 +138,8 @@ ___MARCA_FIN;
 
         // Footer
         echo "<div style='text-align: center'>
-                <a href='$rutaListadoUsers'>Listado Users</a>
                 <a href='$rutaRaiz'>Inicio</a>
+                <a href='$rutaListadoUsers'>Listado Users</a>
             </div>";
     }
 }
@@ -188,42 +187,63 @@ ___MARCA_FIN;
 
     // Footer
     echo "<div style='text-align: center'>
-    <a href='$rutaNuevoResult'>Nuevo Resultado</a>
     <a href='$rutaRaiz'>Inicio</a>
+    <a href='$rutaNuevoResult'>Nuevo Resultado</a>
     </div>";
 }
 
 function funcionNuevoResult()
 {
     global $routes, $context;
-    var_dump($context);
+//    var_dump($context);
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
+    $rutaNuevoResult = $path . $routes->get('ruta_result_nuevo')->getPath();
+    $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
+    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
+
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
-        $rutaNuevoResult = $routes->get('ruta_result_nuevo')->getPath();
         echo <<< ___MARCA_FIN
-    <form method="POST" action="$rutaNuevoResult">
-        Resultado: <input type="number" name="result" required>
-        UserId: <input type="number" name="userId" required>
-        TimeStamp: <input type="date" name="timeStamp" >
+<h2 style="text-align: center">Nuevo resultado</h2>
+     <form style="text-align: center" method="POST" action="$rutaNuevoResult">
+        Resultado: <input type="number" name="result" required><br><br>
+        UserId: <input type="number" name="userId" required><br><br>
+        TimeStamp: <input type="date" name="timeStamp" ><br><br>
         <input type="submit" value="Enviar"> 
     </form>
+   <div style='text-align: center'>
+                <a href='$rutaRaiz'>Inicio</a>
+                <a href='$rutaListadoResults'>Listado Results</a>
+            </div>
 ___MARCA_FIN;
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
         $entityManager = Utils::getEntityManager();
 
-        $result = $_POST['result'];
+        $newResult = $_POST['result'];
         $userId = $_POST['userId'];
-        $timeStamp = $_POST['timeStamp'] ?? new DateTime('now');
+        $timeStamp = isset($_POST['timeStamp']) ? new DateTime($_POST['timeStamp']) : new DateTime('now');
 
-        $user = new User($result, $userId, $timeStamp);
+    $user = $entityManager
+        ->getRepository(User::class)
+        ->findOneBy(['id' => $userId]);
+    if (null === $user) {
+        echo "Usuario $userId no encontrado" . PHP_EOL;
+        exit(0);
+    }
+
+        $result = new Result($newResult, $user, $timeStamp);
 
         // Hacer persistente los datos
         $entityManager->persist($result);
         $entityManager->flush();
-        var_dump($result);
+//        var_dump($result);
 
-        // Enlace Listado Resultados
-        $rutaListadoResults = $routes->get('ruta_result_list')->getPath();
-        echo "<a href='$rutaListadoResults'>Listado Resultados</a>";
+        echo "<h2 style=\"text-align: center\">Resultado $newResult creado!</h2>";
+
+        // Footer
+        echo "<div style='text-align: center'>
+                <a href='$rutaRaiz'>Inicio</a>
+                <a href='$rutaListadoResults'>Listado Results</a>
+            </div>";
     }
 }
