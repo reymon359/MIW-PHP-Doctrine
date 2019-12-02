@@ -42,6 +42,8 @@ function funcionListadoUsers(): void
 {
     global $routes;
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
+    $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
+    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
 
     $entityManager = Utils::getEntityManager();
     $usersRepository = $entityManager->getRepository(User::class);
@@ -83,29 +85,34 @@ ___MARCA_FIN;
  </table>
 ___MARCA_FIN;
 
-    // Enlace Nuevo User
-    $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
-    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
+
+    // Footer
     echo "<div style='text-align: center'>
     <a href='$rutaNuevoUser'>Nuevo User</a>
     <a href='$rutaRaiz'>Inicio</a>
     </div>";
 }
 
+
 function funcionNuevoUser()
 {
     global $routes, $context;
-    var_dump($context);
+//    var_dump($context);
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
+    $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
+    $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
+    $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
-        $rutaNuevoUser = $routes->get('ruta_user_nuevo')->getPath();
+//        $rutaNuevoUser = $routes->get('ruta_user_nuevo')->getPath();
         echo <<< ___MARCA_FIN
-    <form method="POST" action="$rutaNuevoUser">
-        Nombre: <input type="text" name="nombre" required>
-        Email: <input type="email" name="email" required>
-        Password: <input type="password" name="password" required>
+<h2 style="text-align: center">Nuevo usuario</h2>
+    <form style="text-align: center" method="POST" action="$rutaNuevoUser">
+        Nombre: <input type="text" name="nombre" required><br><br>
+        Email: <input type="email" name="email" required><br><br>
+        Password: <input type="password" name="password" required><br><br>
         Enabled: <input type="checkbox" name="enabled" value="true"> 
-        isAdmin: <input type="checkbox" name="isAdmin" value="true"> 
+        isAdmin: <input type="checkbox" name="isAdmin" value="true"> <br><br>
         <input type="submit" value="Enviar"> 
     </form>
 ___MARCA_FIN;
@@ -123,11 +130,15 @@ ___MARCA_FIN;
         // Hacer persistente los datos
         $entityManager->persist($user);
         $entityManager->flush();
-        var_dump($user);
+//        var_dump($user);
 
-        // Enlace Listado Users
-        $rutaListadoUsers = $routes->get('ruta_user_list')->getPath();
-        echo "<a href='$rutaListadoUsers'>Listado Users</a>";
+        echo "<h2 style=\"text-align: center\">Usuario $nombre creado!</h2>";
+
+        // Footer
+        echo "<div style='text-align: center'>
+                <a href='$rutaListadoUsers'>Listado Users</a>
+                <a href='$rutaRaiz'>Inicio</a>
+            </div>";
     }
 }
 
