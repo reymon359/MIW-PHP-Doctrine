@@ -104,6 +104,7 @@ ___MARCA_FIN;
 
     }
 }
+
 function funcionActualizarUser()
 {
     displayNavbar();
@@ -128,7 +129,7 @@ function funcionActualizarUser()
 ___MARCA_FIN;
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
         $entityManager = Utils::getEntityManager();
-        $userId = (int) $_POST['userId'];
+        $userId = (int)$_POST['userId'];
         /** @var User $user */
         $user = $entityManager
             ->getRepository(User::class)
@@ -138,8 +139,8 @@ ___MARCA_FIN;
             exit(0);
         }
 
-        $user->setUsername((string)$_POST['nombre'] );
-        $user->setEmail((string) $_POST['email']);
+        $user->setUsername((string)$_POST['nombre'] ?? $user->getUsername());
+        $user->setEmail((string)$_POST['email'] ?? $user->getEmail());
         $user->setPassword((string)$_POST['password']);
         $user->setEnabled(isset($_POST['enabled']) ? $_POST['enabled'] : false);
         $user->setIsAdmin(isset($_POST['isAdmin']) ? $_POST['isAdmin'] : false);
@@ -154,6 +155,7 @@ ___MARCA_FIN;
 
     }
 }
+
 function funcionEliminarUser()
 {
     displayNavbar();
@@ -236,11 +238,9 @@ ___MARCA_FIN;
 function funcionNuevoResult()
 {
     displayNavbar();
-
     global $routes;
     $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
     $rutaNuevoResult = $path . $routes->get('ruta_result_nuevo')->getPath();
-
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
         echo <<< ___MARCA_FIN
@@ -251,7 +251,6 @@ function funcionNuevoResult()
         TimeStamp: <input type="date" name="timeStamp" ><br><br>
         <input type="submit" value="Enviar"> 
     </form>
-
 ___MARCA_FIN;
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
         $entityManager = Utils::getEntityManager();
@@ -273,11 +272,67 @@ ___MARCA_FIN;
             exit(0);
         }
         $result = new Result($newResult, $user, $timeStamp);
-        // Hacer persistente los datos
         $entityManager->persist($result);
         $entityManager->flush();
-//        var_dump($result);
         echo "<h2 style=\"text-align: center\">Resultado $newResult creado!</h2>";
+
+    }
+}
+
+function funcionActualizarResult()
+{
+    displayNavbar();
+    global $routes;
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
+    $rutaActualizarResult = $path . $routes->get('ruta_result_actualizar')->getPath();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
+        echo <<< ___MARCA_FIN
+<h2 style="text-align: center">Actualizar resultado</h2>
+     <form style="text-align: center" method="POST" action="$rutaActualizarResult">
+        Id del resultado: <input type="number" name="resultId" required><br><br>
+        Resultado: <input type="number" name="result" required><br><br>
+        UserId: <input type="number" name="userId" required><br><br>
+        TimeStamp: <input type="date" name="timeStamp" ><br><br>
+        <input type="submit" value="Enviar"> 
+    </form>
+___MARCA_FIN;
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
+        $entityManager = Utils::getEntityManager();
+
+        $resultId = $_POST['resultId'];
+        /** @var Result $result */
+        $result = $entityManager
+            ->getRepository(Result::class)
+            ->findOneBy(['id' => $resultId]);
+        if (null === $result) {
+            echo "<h2 style=\"text-align: center\">Resultado con id $resultId no encontrado</h2>" . PHP_EOL;
+            exit(0);
+        }
+
+        $userId = $_POST['userId'] ? (int)$_POST['userId'] : $result->getUser()->getId();
+        /** @var User $user */
+        $user = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['id' => $userId]);
+        if (null === $user) {
+            echo "<h2 style=\"text-align: center\">Usuario con id $userId no encontrado</h2>" . PHP_EOL;
+            exit(0);
+        }
+
+        $result->setResult($_POST['result']);
+        $result->setUser($user);
+        $result->setTime(new DateTime($_POST['timeStamp']) ?? $result->getTime());
+
+        try {
+            $entityManager->persist($result);
+            $entityManager->flush();
+            echo "<h2 style=\"text-align: center\">Resultado con id: $resultId 
+                    y usuario con id: $userId actualizado!</h2>";
+        } catch (Exception $exception) {
+            echo $exception->getMessage();
+        }
+
 
     }
 }
