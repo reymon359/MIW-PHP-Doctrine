@@ -333,6 +333,7 @@ function displayNavbar()
     $rutaEliminarUser = $path . $routes->get('ruta_user_eliminar')->getPath();
     $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
     $rutaNuevoResultado = $path . $routes->get('ruta_result_nuevo')->getPath();
+    $rutaActualizarResultado = $path . $routes->get('ruta_result_actualizar')->getPath();
     $rutaEliminarResultado = $path . $routes->get('ruta_result_eliminar')->getPath();
     echo <<< ____MARCA_FIN
     <ul style="list-style-type: none;display: flex;flex-wrap: wrap;justify-content: space-evenly;align-items: center;">
@@ -343,6 +344,7 @@ function displayNavbar()
         <li><a href="$rutaEliminarUser">Eliminar Usuario</a></li>
         <li><a href="$rutaListadoResults">Listado Resultados</a></li>
         <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>
+        <li><a href="$rutaActualizarResultado">Actualizar Resultado</a></li>
         <li><a href="$rutaEliminarResultado">Eliminar Resultado</a></li>
 
     </ul>

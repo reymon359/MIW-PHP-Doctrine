@@ -26,6 +26,8 @@ ruta_user_eliminar:
   controller: 'funcionEliminarUser'
   methods:   [ GET, POST ]
 
+
+
 ruta_result_list:
   path:     /result/list
   controller: 'funcionListadoResultados'
@@ -35,6 +37,11 @@ ruta_result_list:
 ruta_result_nuevo:
   path:       /result/new
   controller: 'funcionNuevoResult'
+  methods:   [ GET, POST ]
+
+ruta_result_actualizar:
+  path:       /result/update
+  controller: 'funcionActualizarResult'
   methods:   [ GET, POST ]
 
 ruta_result_eliminar:
