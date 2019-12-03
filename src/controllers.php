@@ -98,15 +98,62 @@ ___MARCA_FIN;
 
         $user = new User($nombre, $email, $password, $enabled, $isAdmin);
 
-        // Hacer persistente los datos
         $entityManager->persist($user);
         $entityManager->flush();
-//        var_dump($user);
         echo "<h2 style=\"text-align: center\">Usuario $nombre creado!</h2>";
 
     }
 }
+function funcionActualizarUser()
+{
+    displayNavbar();
+    global $routes;
+    $path = explode("index.php", $_SERVER['REQUEST_URI'])[0] . "index.php";
+    $rutaActualizarUser = $path . $routes->get('ruta_user_actualizar')->getPath();
 
+
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') { // método GET => muestro formulario
+        echo <<< ___MARCA_FIN
+<h2 style="text-align: center">Actualizar usuario</h2>
+    <form style="text-align: center" method="POST" action="$rutaActualizarUser">
+        Id usuario: <input type="number" name="userId" required><br><br>
+        Nombre: <input type="text" name="nombre" required><br><br>
+        Email: <input type="email" name="email" required><br><br>
+        Password: <input type="password" name="password" required><br><br>
+        Enabled: <input type="checkbox" name="enabled" > 
+        isAdmin: <input type="checkbox" name="isAdmin" > <br><br>
+        <input type="submit" value="Enviar"> 
+    </form>
+       
+___MARCA_FIN;
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {    // método POST => proceso formulario
+        $entityManager = Utils::getEntityManager();
+        $userId = (int) $_POST['userId'];
+        /** @var User $user */
+        $user = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['id' => $userId]);
+        if (null === $user) {
+            echo "<h2 style=\"text-align: center\">Usuario con id $userId no encontrado</h2>";
+            exit(0);
+        }
+
+        $user->setUsername((string)$_POST['nombre'] );
+        $user->setEmail((string) $_POST['email']);
+        $user->setPassword((string)$_POST['password']);
+        $user->setEnabled(isset($_POST['enabled']) ? $_POST['enabled'] : false);
+        $user->setIsAdmin(isset($_POST['isAdmin']) ? $_POST['isAdmin'] : false);
+
+        try {
+            $entityManager->persist($user);
+            $entityManager->flush();
+            echo "<h2 style=\"text-align: center\">Usuario con id: $userId actualizado!</h2>";
+        } catch (Exception $exception) {
+            echo $exception->getMessage() . PHP_EOL;
+        }
+
+    }
+}
 function funcionEliminarUser()
 {
     displayNavbar();
@@ -282,6 +329,7 @@ function displayNavbar()
     $rutaRaiz = $path . $routes->get('ruta_raíz')->getPath();
     $rutaListadoUsers = $path . $routes->get('ruta_user_list')->getPath();
     $rutaNuevoUser = $path . $routes->get('ruta_user_nuevo')->getPath();
+    $rutaActualizarUser = $path . $routes->get('ruta_user_actualizar')->getPath();
     $rutaEliminarUser = $path . $routes->get('ruta_user_eliminar')->getPath();
     $rutaListadoResults = $path . $routes->get('ruta_result_list')->getPath();
     $rutaNuevoResultado = $path . $routes->get('ruta_result_nuevo')->getPath();
@@ -291,6 +339,7 @@ function displayNavbar()
         <li><a href="$rutaRaiz">Inicio</a></li>
         <li><a href="$rutaListadoUsers">Listado Usuarios</a></li>
         <li><a href="$rutaNuevoUser">Nuevo Usuario</a></li>
+        <li><a href="$rutaActualizarUser">Actualizar Usuario</a></li>
         <li><a href="$rutaEliminarUser">Eliminar Usuario</a></li>
         <li><a href="$rutaListadoResults">Listado Resultados</a></li>
         <li><a href="$rutaNuevoResultado">Nuevo Resultado</a></li>

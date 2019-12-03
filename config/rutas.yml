@@ -16,6 +16,11 @@ ruta_user_nuevo:
   controller: 'funcionNuevoUser'
   methods:   [ GET, POST ]
 
+ruta_user_actualizar:
+  path:       /user/update
+  controller: 'funcionActualizarUser'
+  methods:   [ GET, POST ]
+
 ruta_user_eliminar:
   path:       /user/delete
   controller: 'funcionEliminarUser'
