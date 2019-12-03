@@ -140,8 +140,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     public function testToString(): void
     {
         $result = new Result(self::POINTS, $this->user, new DateTime('2019-12-02 11:11:11'));
-       echo $result->__toString();
-        self::assertEquals("  0 - ".self::POINTS." -               ".self::USERNAME." - 2019-12-02 11:11:11", $result->__toString());
+        self::assertEquals("  0 - " . self::POINTS . " -               " . self::USERNAME . " - 2019-12-02 11:11:11", $result->__toString());
 
     }
 
@@ -153,8 +152,8 @@ class ResultTest extends \PHPUnit\Framework\TestCase
      */
     public function testJsonSerialize(): void
     {
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $result = new Result(self::POINTS, $this->user, new DateTime('2019-12-02 11:11:11'));
+        self::assertEquals("0" . self::POINTS . self::USERNAME . '2019-12-02 11:11:11',
+            implode("", $result->jsonSerialize()));
     }
 }
